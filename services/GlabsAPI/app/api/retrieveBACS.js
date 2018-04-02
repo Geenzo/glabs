@@ -33,14 +33,44 @@ const readBacFiles = (retrievedBacs) => {
 };
 
 const parseBacFile = (bacFilesXMLData) => {
-console.log(bacFilesXMLData);
+    let parsedBacsData = bacFilesXMLData.map((bacXMLData) => {
+        return new Promise((resolve, reject) => {
+            return parser.parseString(bacXMLData, (err, parsedData) => {
+                resolve(parsedData)
+            })
+        })
+    })
 
+    return Promise.all(parsedBacsData)
+}
+
+const saveBacToDB = (parsedBacData) => {
+    
+    let savedBac = parsedBacData.map(parsedBac => {
+        // console.log(parsedBac);
+        // console.log(parsedBac.BACSDocument.Data.ARUDD);
+        
+        return new Promise((resolve, reject) => {
+            let bacsDocument = new BacsDoc ({
+              name: `BAC - ${parsedBac.BACSDocument.Data.ARUDD.Header.adviceNumber} - ${parsedBac.BACSDocument.Data.ARUDD.Header.currentProcessingDate} - ${parsedBac.BACSDocument.Data.ARUDD.AddresseeInformation.name}`,
+              created: moment().format('DD-MM-YYYY'),
+              updated: moment().format('DD-MM-YYYY'),
+              bacsDocument: parsedBac.BACSDocument,
+              status: "Ready For Processing"
+            })
+            console.log(bacsDocument);
+            
+            return bacsDocument.save()
+          })
+    })
+    
 }
 
 const RetrieveBacsDocs = () => {
     return retrieveBacsFromDirectory()
         .then(readBacFiles)
         .then(parseBacFile)
+        .then(saveBacToDB)
         .catch((err) => {
             console.log(`${err} - RetrieveBacsDocs task now exiting...`);
         })
