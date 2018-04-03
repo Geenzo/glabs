@@ -4,7 +4,7 @@ const glob = require('glob');
 const moment = require('moment');
 const path = require('path');
 const {BacsDoc} = require('../models/bacsDocModel');
-
+var archiver = require('archiver');
 
 const parser = new xml2js.Parser({explicitArray : false, ignoreAttrs : false, mergeAttrs : true});
 
@@ -47,9 +47,7 @@ const parseBacFile = (bacFilesXMLData) => {
 const saveBacToDB = (parsedBacData) => {
     
     let savedBac = parsedBacData.map(parsedBac => {
-        // console.log(parsedBac);
-        // console.log(parsedBac.BACSDocument.Data.ARUDD);
-        
+
         return new Promise((resolve, reject) => {
             let bacsDocument = new BacsDoc({
               name: `BAC - ${parsedBac.BACSDocument.Data.ARUDD.Header.adviceNumber} - ${parsedBac.BACSDocument.Data.ARUDD.Header.currentProcessingDate} - ${parsedBac.BACSDocument.Data.ARUDD.AddresseeInformation.name}`,
@@ -66,11 +64,58 @@ const saveBacToDB = (parsedBacData) => {
     
 }
 
+const archiveProcessedBac = (savedBac) => {
+    return new Promise((resolve, reject) => {
+        const DirectoryDate = moment().subtract(1, 'days').format('DD-MM-YYYY');
+        let newDir = path.join(__dirname + `../../../../../BACSDirectory/newBACS/${DirectoryDate}`)
+        
+        var output = fs.createWriteStream(__dirname + `../../../../../BACSDirectory/archivedBACS/${DirectoryDate}-BACS.zip`);
+
+        var archive = archiver('zip', {
+        zlib: { level: 9 } // Sets the compression level.
+        });
+
+        output.on('close', function() {
+        console.log(archive.pointer() + ' total bytes');
+        console.log('Yesterdays BACS have been archived.');
+        });
+
+        output.on('end', function() {
+        console.log('Data has been drained');
+        });
+
+        // good practice to catch warnings (ie stat failures and other non-blocking errors)
+        archive.on('warning', function(err) {
+        if (err.code === 'ENOENT') {
+            // log warning
+        } else {
+            // throw error
+            throw err;
+        }
+        });
+
+        // good practice to catch this error explicitly
+        archive.on('error', function(err) {
+        throw err;
+        });
+
+        archive.pipe(output);
+        
+        archive.directory(newDir, false).finalize();
+                
+    });
+}
+
 const RetrieveBacsDocs = () => {
     return retrieveBacsFromDirectory()
         .then(readBacFiles)
         .then(parseBacFile)
         .then(saveBacToDB)
+        .then(archiveProcessedBac)
+        .then(bacSaved => {
+            console.log(bacSaved);
+            
+        })
         .catch((err) => {
             console.log(`${err} - RetrieveBacsDocs task now exiting...`);
         })
