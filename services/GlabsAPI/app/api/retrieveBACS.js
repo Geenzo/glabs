@@ -51,12 +51,12 @@ const saveBacToDB = (parsedBacData) => {
         // console.log(parsedBac.BACSDocument.Data.ARUDD);
         
         return new Promise((resolve, reject) => {
-            let bacsDocument = new BacsDoc ({
+            let bacsDocument = new BacsDoc({
               name: `BAC - ${parsedBac.BACSDocument.Data.ARUDD.Header.adviceNumber} - ${parsedBac.BACSDocument.Data.ARUDD.Header.currentProcessingDate} - ${parsedBac.BACSDocument.Data.ARUDD.AddresseeInformation.name}`,
               created: moment().format('DD-MM-YYYY'),
               updated: moment().format('DD-MM-YYYY'),
               bacsDocument: parsedBac.BACSDocument,
-              status: "Ready For Processing"
+              state: "Ready For Processing"
             })
             console.log(bacsDocument);
             

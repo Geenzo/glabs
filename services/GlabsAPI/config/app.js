@@ -13,8 +13,8 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 
 consign()
-  .include('../app/setup/index.js')
-  .then('../api/retrieveBACS.js')
+  .include('services/GlabsAPI/app/setup/index.js')
+  .then('services/GlabsAPI/app/api/retrieveBACS.js')
   .into(app);
 
 module.exports = app;

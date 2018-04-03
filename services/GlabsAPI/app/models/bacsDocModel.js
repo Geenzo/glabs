@@ -27,4 +27,6 @@ const Schema = mongoose.Schema({
   }
 });
 
-mongoose.model('BacsDocument', Schema);
+const BacsDoc = mongoose.model('BacsDocument', Schema);
+
+module.exports = {BacsDoc}
