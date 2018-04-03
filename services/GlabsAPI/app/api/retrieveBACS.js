@@ -114,7 +114,7 @@ const RetrieveBacsDocs = () => {
         .then(archiveProcessedBac)
         .then(bacSaved => {
             console.log(bacSaved);
-            
+            //TODO: RENAME DIRECTOR THAT HAS BEEN PROCESSED TO STOP REPEAT BACS GOING INTO MONGODB
         })
         .catch((err) => {
             console.log(`${err} - RetrieveBacsDocs task now exiting...`);
