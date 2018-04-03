@@ -4,7 +4,8 @@ const express = require('express'),
   mongoose = require('mongoose'),
   config = require('./index.js'),
   database = require('./database')(mongoose, config),
-  consign = require('consign')
+  consign = require('consign'),
+  {RetrieveBacsDocs} = require('../app/api/retrieveBACS')
 
 app.use(express.static('.'));
 app.use(bodyParser.urlencoded({
@@ -14,7 +15,7 @@ app.use(bodyParser.json());
 
 consign()
   .include('services/GlabsAPI/app/setup/index.js')
-  .then('services/GlabsAPI/app/api/retrieveBACS.js')
+  .then(RetrieveBacsDocs)
   .into(app);
 
 module.exports = app;
