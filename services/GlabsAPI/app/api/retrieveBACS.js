@@ -121,4 +121,4 @@ const RetrieveBacsDocs = () => {
         })
 }
 
-module.exports = {RetrieveBacsDocs};
+module.exports = {RetrieveBacsDocs}
