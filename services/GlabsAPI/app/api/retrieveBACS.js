@@ -1,10 +1,10 @@
-const fs = require('fs');
-const xml2js = require('xml2js');
-const glob = require('glob');
-const moment = require('moment');
-const path = require('path');
-const {BacsDoc} = require('../models/bacsDocModel');
-var archiver = require('archiver');
+const fs = require('fs'),
+    xml2js = require('xml2js'),
+    glob = require('glob'),
+    moment = require('moment'),
+    path = require('path'),
+    {BacsDoc} = require('../models/bacsDocModel'),
+    archiver = require('archiver');
 
 const parser = new xml2js.Parser({explicitArray : false, ignoreAttrs : false, mergeAttrs : true});
 
