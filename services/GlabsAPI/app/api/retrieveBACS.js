@@ -77,7 +77,7 @@ const archiveProcessedBac = (savedBac) => {
 
         output.on('close', function() {
         console.log(archive.pointer() + ' total bytes');
-        console.log('Yesterdays BACS have been archived.');
+        resolve('Yesterdays BACS have been archived.')
         });
 
         output.on('end', function() {
