@@ -21,6 +21,12 @@ new CronJob('* * * * *', function() {
   console.log('Cron Job for Retrieving BACS has been triggered...');
 }, null, true, 'Europe/London');
 
+//Cron job to process BACs every 2 minute
+new CronJob('*/2 * * * *', function() {
+  ReturnDebits()
+  console.log('Cron Job for Processing BACS has been triggered...');
+}, null, true, 'Europe/London');
+
 consign()
   .include('services/GlabsAPI/app/setup/index.js')
   .then('services/GlabsAPI/app/routes')
