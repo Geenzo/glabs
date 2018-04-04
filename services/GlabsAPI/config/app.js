@@ -7,7 +7,8 @@ const express = require('express'),
   consign = require('consign'),
   {RetrieveBacsDocs} = require('../app/api/retrieveBACS'),
   CronJob = require('cron').CronJob,
-  {ReturnDebits} = require('../app/api/returnDebits')
+  {ReturnDebits} = require('../app/api/returnDebits'),
+  opn = require('opn')
 
 app.use(express.static('.'));
 app.use(bodyParser.urlencoded({
@@ -36,5 +37,7 @@ consign()
 RetrieveBacsDocs()
 .then(ReturnDebits)
 
+//opens front-end page for use to see BACs and returned debit items
+opn('http://localhost:3001/application/')
 
 module.exports = app;
