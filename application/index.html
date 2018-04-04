@@ -33,22 +33,22 @@
         <thead>
           <tr>
             <td>
-              Name
+              <h4>Name</h4>
             </td>
             <td>
-              created
+              <h4>Created</h4>
             </td>
             <td>
-              Company
+              <h4>Company</h4>
             </td>
             <td>
-              Originating Account
+              <h4>Originating Account</h4>
             </td>
             <td>
-              Returned Debit Items
+              <h4>Returned Debit Items</h4>
             </td>
             <td>
-              Totals
+              <h4>Totals</h4>
             </td>
           </tr>
         </thead>
@@ -64,33 +64,37 @@
               {{ returnedDebit.bacsDocument.Data.ARUDD.AddresseeInformation.name }}
             </td>
             <td>
-              Bank Name: {{ returnedDebit.bacsDocument.Data.ARUDD.Advice.OriginatingAccountRecords.OriginatingAccountRecord.OriginatingAccount.bankName }}<br>
-              Branch Name: {{ returnedDebit.bacsDocument.Data.ARUDD.Advice.OriginatingAccountRecords.OriginatingAccountRecord.OriginatingAccount.branchName }}<br>
-              Name: {{ returnedDebit.bacsDocument.Data.ARUDD.Advice.OriginatingAccountRecords.OriginatingAccountRecord.OriginatingAccount.name }}<br>
-              Account Number: {{ returnedDebit.bacsDocument.Data.ARUDD.Advice.OriginatingAccountRecords.OriginatingAccountRecord.OriginatingAccount.number }}<br>
-              Sort Code: {{ returnedDebit.bacsDocument.Data.ARUDD.Advice.OriginatingAccountRecords.OriginatingAccountRecord.OriginatingAccount.sortCode }}<br>
+              <b>Bank Name:</b> {{ returnedDebit.bacsDocument.Data.ARUDD.Advice.OriginatingAccountRecords.OriginatingAccountRecord.OriginatingAccount.bankName }}<br>
+              <b>Branch Name:</b> {{ returnedDebit.bacsDocument.Data.ARUDD.Advice.OriginatingAccountRecords.OriginatingAccountRecord.OriginatingAccount.branchName }}<br>
+              <b>Name:</b> {{ returnedDebit.bacsDocument.Data.ARUDD.Advice.OriginatingAccountRecords.OriginatingAccountRecord.OriginatingAccount.name }}<br>
+              <b>Account Number:</b> {{ returnedDebit.bacsDocument.Data.ARUDD.Advice.OriginatingAccountRecords.OriginatingAccountRecord.OriginatingAccount.number }}<br>
+              <b>Sort Code:</b> {{ returnedDebit.bacsDocument.Data.ARUDD.Advice.OriginatingAccountRecords.OriginatingAccountRecord.OriginatingAccount.sortCode }}<br>
             </td>
             <td>
               <div v-for="returnedDebititem in returnedDebit.bacsDocument.Data.ARUDD.Advice.OriginatingAccountRecords.OriginatingAccountRecord.ReturnedDebitItem">
-                  Payer Details
+                  <b>Payer Details</b>
                   <hr />
-                  Bank Name: {{ returnedDebititem.PayerAccount.bankName }}<br>
-                  Branch Name: {{ returnedDebititem.PayerAccount.branchName }}<br>
-                  Payers Name: {{ returnedDebititem.PayerAccount.name }}<br>
-                  Account Number: {{ returnedDebititem.PayerAccount.number }}<br>
-                  Sort Code: {{ returnedDebititem.PayerAccount.sortCode }}<br>
-                  Reference: {{ returnedDebititem.PayerAccount.ref }}<br>
+                  <b>Bank Name:</b> {{ returnedDebititem.PayerAccount.bankName }}<br>
+                  <b>Branch Name:</b> {{ returnedDebititem.PayerAccount.branchName }}<br>
+                  <b>Payers Name:</b> {{ returnedDebititem.PayerAccount.name }}<br>
+                  <b>Account Number:</b> {{ returnedDebititem.PayerAccount.number }}<br>
+                  <b>Sort Code:</b> {{ returnedDebititem.PayerAccount.sortCode }}<br>
+                  <b>Reference:</b> {{ returnedDebititem.PayerAccount.ref }}<br>
                   <hr />
-                  Transaction Details
+                  <b>Transaction Details</b>
                   <hr />
-                  Original Processing Date: {{ returnedDebititem.originalProcessingDate}}<br>
-                  Reference: {{ returnedDebititem.originalProcessingDate}}<br>
-                  Return Description: {{ returnedDebititem.returnDescription}}<br>
-                  Return Code: {{ returnedDebititem.returnCode}}<br>
-                  Transaction Code: {{ returnedDebititem.transCode}}<br>
-                  Value of Transaction: {{ returnedDebititem.valueOf | currency('£')}}
+                  <b>Original Processing Date:</b> {{ returnedDebititem.originalProcessingDate}}<br>
+                  <b>Reference:</b> {{ returnedDebititem.originalProcessingDate}}<br>
+                  <b>Return Description:</b> {{ returnedDebititem.returnDescription}}<br>
+                  <b>Return Code:</b> {{ returnedDebititem.returnCode}}<br>
+                  <b>Transaction Code:</b> {{ returnedDebititem.transCode}}<br>
+                  <b>Value of Transaction:</b> {{ returnedDebititem.valueOf | currency('£')}}
                   <hr />
               </div>
+            </td>
+            <td>
+              <b>Number of Transactions:</b> {{ returnedDebit.bacsDocument.Data.ARUDD.Advice.OriginatingAccountRecords.OriginatingAccountRecord.Totals.numberOf }}<br>
+              <b>Total of All Transactions:</b> {{ returnedDebit.bacsDocument.Data.ARUDD.Advice.OriginatingAccountRecords.OriginatingAccountRecord.Totals.valueOf | currency('£')}}<br>
             </td>
           </tr>
         </tbody>
