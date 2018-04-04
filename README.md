@@ -33,24 +33,24 @@ Once you have the above installed - follow the following steps to start the appl
  Vue.js
 
  <h4>Backend:</h4>
- Node.js
+ Node.js<br>
  MongoDB
 
 <h4>Testing:</h4>
-Mocha
+Mocha<br>
 Chai
 
 <h4>Dependancies:</h4>
-archiver: ^2.1.1
-body-parser: ^1.18.2
-chai: ^4.1.2
-consign: ^0.1.6
-cron: ^1.3.0
-express: ^4.16.3
-glob: ^7.1.2
-mocha: ^5.0.5
-moment: ^2.22.0
-mongoose: ^5.0.12
-opn: ^5.3.0
-path: ^0.12.7
-xml2js: ^0.4.19
+archiver: ^2.1.1<br>
+body-parser: ^1.18.2<br>
+chai: ^4.1.2<br>
+consign: ^0.1.6<br>
+cron: ^1.3.0<br>
+express: ^4.16.3<br>
+glob: ^7.1.2<br>
+mocha: ^5.0.5<br>
+moment: ^2.22.0<br>
+mongoose: ^5.0.12<br>
+opn: ^5.3.0<br>
+path: ^0.12.7<br>
+xml2js: ^0.4.19<br>
