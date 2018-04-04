@@ -56,12 +56,14 @@ const saveBacToDB = (parsedBacData) => {
               bacsDocument: parsedBac.BACSDocument,
               state: "Ready For Processing"
             })
-            console.log(bacsDocument);
             
-            return bacsDocument.save()
+            return bacsDocument.save().then(savedBac => {
+                resolve(savedBac)
+            })
           })
     })
     
+    return Promise.all(savedBac)
 }
 
 const archiveProcessedBac = (savedBac) => {
@@ -76,8 +78,9 @@ const archiveProcessedBac = (savedBac) => {
         });
 
         output.on('close', function() {
+        console.log("Yesterdays BACS have been archived.")   
         console.log(archive.pointer() + ' total bytes');
-        resolve('Yesterdays BACS have been archived.')
+        resolve(savedBac)
         });
 
         output.on('end', function() {
@@ -113,7 +116,7 @@ const RetrieveBacsDocs = () => {
         .then(saveBacToDB)
         .then(archiveProcessedBac)
         .then(bacSaved => {
-            console.log(bacSaved);
+            console.log(`${bacSaved.length} BACS have been logged to be processed - retrieve BACS Task now exiting...`);
             //TODO: RENAME DIRECTOR THAT HAS BEEN PROCESSED TO STOP REPEAT BACS GOING INTO MONGODB
         })
         .catch((err) => {
