@@ -34,7 +34,7 @@ consign()
 
 // Retrieves new BACS on load of application
 RetrieveBacsDocs()
+.then(ReturnDebits)
 
-ReturnDebits()
 
 module.exports = app;
