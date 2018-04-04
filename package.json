@@ -4,8 +4,7 @@
   "description": "converting sample xml files to json and storing within mongodb",
   "main": "index.js",
   "scripts": {
-    "start": "\"npm run server\"",
-    "server": "node services/index.js",
+    "start": "node services/index.js",
     "test": "node node_modules/mocha/bin/mocha tests/**/*Test.js --reporter spec"
   },
   "repository": {
