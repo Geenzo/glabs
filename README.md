@@ -17,8 +17,10 @@ Once you have the above installed - follow the following steps to start the appl
 
 1. `git clone https://github.com/Geenzo/glabs.git`
 2. run `npm install` in the root of the cloned repo
-3. have local instance of mongoDB running
-4. run `npm start`
+3. go into the `BACSDirectory/NewBACS` folder and create a copy of one of the example directories (with the bacs.xml files inside)
+4. rename the new directory you have created to yesterdays date in the format of `DD-MM-YYYY` like the other examples
+5. have local instance of mongoDB running
+6. run `npm start`
 
 # Testing
 
