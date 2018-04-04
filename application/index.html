@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Glabs BACs</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="static/css/style.css">
+
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body class="container">
+    <h1>Glabs BACs</h1>
+
+    <div class="row">
+      <div class="jumbotron col-xs-offset-2 col-xs-8">
+        <p>
+          This contains the list of BACS that have been processed by Glabs
+        </p>
+      </div>
+    </div>
+
+    <div id="app">
+
+      <hr />
+
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <td>
+              Name
+            </td>
+            <td>
+              created
+            </td>
+            <td>
+              Company
+            </td>
+            <td>
+              Originating Account
+            </td>
+            <td>
+              Returned Debit Items
+            </td>
+            <td>
+              Totals
+            </td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="returnedDebit in returnedDebits">
+            <td>
+              {{ returnedDebit.name }}
+            </td>
+            <td>
+              {{ returnedDebit.created }}
+            </td>
+            <td>
+              {{ returnedDebit.bacsDocument.Data.ARUDD.AddresseeInformation.name }}
+            </td>
+            <td>
+              Bank Name: {{ returnedDebit.bacsDocument.Data.ARUDD.Advice.OriginatingAccountRecords.OriginatingAccountRecord.OriginatingAccount.bankName }}<br>
+              Branch Name: {{ returnedDebit.bacsDocument.Data.ARUDD.Advice.OriginatingAccountRecords.OriginatingAccountRecord.OriginatingAccount.branchName }}<br>
+              Name: {{ returnedDebit.bacsDocument.Data.ARUDD.Advice.OriginatingAccountRecords.OriginatingAccountRecord.OriginatingAccount.name }}<br>
+              Account Number: {{ returnedDebit.bacsDocument.Data.ARUDD.Advice.OriginatingAccountRecords.OriginatingAccountRecord.OriginatingAccount.number }}<br>
+              Sort Code: {{ returnedDebit.bacsDocument.Data.ARUDD.Advice.OriginatingAccountRecords.OriginatingAccountRecord.OriginatingAccount.sortCode }}<br>
+            </td>
+            <td>
+              <div v-for="returnedDebititem in returnedDebit.bacsDocument.Data.ARUDD.Advice.OriginatingAccountRecords.OriginatingAccountRecord.ReturnedDebitItem">
+                  Payer Details
+                  <hr />
+                  Bank Name: {{ returnedDebititem.PayerAccount.bankName }}<br>
+                  Branch Name: {{ returnedDebititem.PayerAccount.branchName }}<br>
+                  Payers Name: {{ returnedDebititem.PayerAccount.name }}<br>
+                  Account Number: {{ returnedDebititem.PayerAccount.number }}<br>
+                  Sort Code: {{ returnedDebititem.PayerAccount.sortCode }}<br>
+                  Reference: {{ returnedDebititem.PayerAccount.ref }}<br>
+                  <hr />
+                  Transaction Details
+                  <hr />
+                  Original Processing Date: {{ returnedDebititem.originalProcessingDate}}<br>
+                  Reference: {{ returnedDebititem.originalProcessingDate}}<br>
+                  Return Description: {{ returnedDebititem.returnDescription}}<br>
+                  Return Code: {{ returnedDebititem.returnCode}}<br>
+                  Transaction Code: {{ returnedDebititem.transCode}}<br>
+                  Value of Transaction: {{ returnedDebititem.valueOf | currency('£')}}
+                  <hr />
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/vue"></script>
+    <script src="https://cdn.jsdelivr.net/vue2-filters/0.1.9/vue2-filters.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="static/js/app.js"></script>
+  </body>
+</html>
