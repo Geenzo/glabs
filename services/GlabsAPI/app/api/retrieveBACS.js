@@ -11,7 +11,7 @@ const parser = new xml2js.Parser({explicitArray : false, ignoreAttrs : false, me
 const retrieveBacsFromDirectory = () => {
   return new Promise ((resolve, reject) => {
     const DirectoryDate = moment().subtract(1, 'days').format('DD-MM-YYYY');
-    let yesterdaysBacFiles = glob.sync(path.join(__dirname, `../../../../BACSDirectory/newBACS/${DirectoryDate}/*.xml`));
+    let yesterdaysBacFiles = glob.sync(path.join(`BACSDirectory/newBACS/${DirectoryDate}/*.xml`));
     if (yesterdaysBacFiles.length > 0) {
     resolve(yesterdaysBacFiles)
   } else {
@@ -69,9 +69,9 @@ const saveBacToDB = (parsedBacData) => {
 const archiveProcessedBac = (savedBac) => {
     return new Promise((resolve, reject) => {
         const DirectoryDate = moment().subtract(1, 'days').format('DD-MM-YYYY');
-        let newDir = path.join(__dirname + `../../../../../BACSDirectory/newBACS/${DirectoryDate}`)
+        let newDir = path.join(`BACSDirectory/newBACS/${DirectoryDate}`)
         
-        var output = fs.createWriteStream(__dirname + `../../../../../BACSDirectory/archivedBACS/${DirectoryDate}-BACS.zip`);
+        var output = fs.createWriteStream(`BACSDirectory/archivedBACS/${DirectoryDate}-BACS.zip`);
 
         var archive = archiver('zip', {
         zlib: { level: 9 } // Sets the compression level.
