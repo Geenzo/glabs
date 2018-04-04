@@ -80,7 +80,9 @@
               <b>Sort Code:</b> {{ returnedDebit.bacsDocument.Data.ARUDD.Advice.OriginatingAccountRecords.OriginatingAccountRecord.OriginatingAccount.sortCode }}<br>
             </td>
             <td>
-              <div v-for="returnedDebititem in returnedDebit.bacsDocument.Data.ARUDD.Advice.OriginatingAccountRecords.OriginatingAccountRecord.ReturnedDebitItem">
+              <div v-for="(returnedDebititem, index) in returnedDebit.bacsDocument.Data.ARUDD.Advice.OriginatingAccountRecords.OriginatingAccountRecord.ReturnedDebitItem">
+                  <h4><b>Return Debit Item # {{ index + 1 }}</b></h4>
+                  <hr />
                   <b>Payer Details</b>
                   <hr />
                   <b>Bank Name:</b> {{ returnedDebititem.PayerAccount.bankName }}<br>
