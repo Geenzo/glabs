@@ -6,7 +6,8 @@ const express = require('express'),
   database = require('./database')(mongoose, config),
   consign = require('consign'),
   {RetrieveBacsDocs} = require('../app/api/retrieveBACS'),
-  CronJob = require('cron').CronJob
+  CronJob = require('cron').CronJob,
+  {ReturnDebits} = require('../app/api/returnDebits')
 
 app.use(express.static('.'));
 app.use(bodyParser.urlencoded({
@@ -22,9 +23,12 @@ new CronJob('* * * * *', function() {
 
 consign()
   .include('services/GlabsAPI/app/setup/index.js')
+  .then('services/GlabsAPI/app/routes')
   .into(app);
 
-//Retrieves new BACS on load of application
+// Retrieves new BACS on load of application
 RetrieveBacsDocs()
+
+ReturnDebits()
 
 module.exports = app;
