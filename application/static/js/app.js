@@ -1,6 +1,6 @@
 let GLABSAPIROOT = "http://localhost:3001";
 
-//rate at which new data is received from backend
+//rate at which new data is received from backend (checks for new bacs every minute)
 let UPDATE_INTERVAL = 60 * 1000;
 
 let app = new Vue({
