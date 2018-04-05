@@ -5,7 +5,7 @@ and place it in the `BACSDirectory/archivedBACS` folder.
 
 After the the above has taken place the app will then run the `returnDebits.js` script that will take any BACS in the mongoDB instance with `state: "Ready For Processing` and process them to returnedDebits. this task will also run every 2 minutes after launch to look for new BACS that come into mongoDB and are ready to be Processed.
 
-The front-end of this application should also open automatically on launch of the app, to `http://localhost:3001/application/` for the user to have a simple UI to view processed BACS.
+The front-end of this application should also open automatically on launch of the app, to `http://localhost:3001/application/` for the user to have a simple UI to view processed BACS. The front-end will also automatically retrieve all new Processed BACS from the back end of the application every minute.
 
 # Running the application
 Once you have Node.js and NPM installed [See Here](https://docs.npmjs.com/getting-started/installing-node)
