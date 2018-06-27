@@ -7,7 +7,8 @@ let app = new Vue({
   el: "#app",
   data: {
     returnedDebits: {},
-    totalBacs: {}
+    totalBacs: {},
+    correctFileType: true
   },
 
   methods: {
@@ -26,6 +27,26 @@ let app = new Vue({
           console.error(err);
         });
     },
+
+    uploadNewBac: function(bacFile) {
+      console.log(bacFile)
+      document.getElementById('uploadBacInput').files[0];
+      console.log(document.getElementById('uploadBacInput').files[0])
+      
+    },
+
+    checkUploadFileType: function(e) {
+      let inputFile = document.getElementById('uploadBacInput').files[0]
+
+      if (inputFile) {
+        if(inputFile.type !== "text/xml") {
+          this.correctFileType = false
+        } else {
+          this.correctFileType = true
+        }  
+      }
+
+    }
 
   },
 
