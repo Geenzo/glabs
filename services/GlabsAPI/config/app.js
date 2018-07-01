@@ -5,28 +5,15 @@ const express = require('express'),
   config = require('./index.js'),
   database = require('./database')(mongoose, config),
   consign = require('consign'),
+  opn = require('opn'),
   {RetrieveBacsDocs} = require('../app/api/retrieveBACS'),
-  CronJob = require('cron').CronJob,
-  {ReturnDebits} = require('../app/api/returnDebits'),
-  opn = require('opn')
+  {ReturnDebits} = require('../app/api/returnDebits')
 
-app.use(express.static('.'));
+app.use(express.static('.'))
 app.use(bodyParser.urlencoded({
   extended: true
 }));
-app.use(bodyParser.json());
-
-//Cron job to check for new BACs every minute
-new CronJob('* * * * *', function() {
-  RetrieveBacsDocs()
-  console.log('Cron Job for Retrieving BACS has been triggered...');
-}, null, true, 'Europe/London');
-
-//Cron job to process BACs every 2 minute
-new CronJob('*/2 * * * *', function() {
-  ReturnDebits()
-  console.log('Cron Job for Processing BACS has been triggered...');
-}, null, true, 'Europe/London');
+app.use(bodyParser.json())
 
 consign()
   .include('services/GlabsAPI/app/setup/index.js')
@@ -38,6 +25,6 @@ RetrieveBacsDocs()
 .then(ReturnDebits)
 
 //opens front-end page for use to see BACs and returned debit items
-opn('http://localhost:3001/application/')
+// opn('http://localhost:3001/application/')
 
 module.exports = app;

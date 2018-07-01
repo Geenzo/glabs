@@ -1,7 +1,7 @@
-let GLABSAPIROOT = "http://localhost:3001";
+let GLABSAPIROOT = "http://localhost:3001"
 
 //rate at which new data is received from backend (checks for new bacs every minute)
-let UPDATE_INTERVAL = 60 * 1000;
+let UPDATE_INTERVAL = 60 * 1000
 
 let app = new Vue({
   el: "#app",
@@ -14,7 +14,6 @@ let app = new Vue({
   methods: {
 
     getReturnedDebits: function() {
-
       axios.get(GLABSAPIROOT + "/v1/ReturnedDebitItems")
         .then((resp) => {    
           this.returnedDebits = resp.data.returnDebits;
@@ -24,7 +23,7 @@ let app = new Vue({
         .catch((err) => {
           console.log('Error')
           console.error(err)
-        });
+        })
     },
 
     uploadNewBac: function(bacFile) {
@@ -68,8 +67,22 @@ let app = new Vue({
   },
 
   created: function() {
-    this.getReturnedDebits();
+    this.getReturnedDebits()
     
+    let socket = io.connect(GLABSAPIROOT)
+
+    socket.on('Retrieve BACS', function (data) {
+      console.log('socket from server received - Retrieve BACS');
+      toastr.info('Yesterdays BACs have now been stored in the database and ready for processing...', 'Back end function successfully ran')      
+      socket.emit('my other event', { my: 'data' })
+    })
+
+    socket.on('Process BACS', function (data) {
+      console.log('socket from server received - process BACS');
+      toastr.info('Yesterdays BACs have now been processed.', 'Back end function successfully ran')
+      app.getReturnedDebits()
+    })
+
     toastr.options = {
       "closeButton": false,
       "debug": false,
