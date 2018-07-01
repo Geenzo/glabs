@@ -14,7 +14,6 @@ let app = new Vue({
   methods: {
 
     getReturnedDebits: function() {
-      let self = this;
 
       axios.get(GLABSAPIROOT + "/v1/ReturnedDebitItems")
         .then((resp) => {    
@@ -23,8 +22,8 @@ let app = new Vue({
           console.log(this.returnedDebits)    
         })
         .catch((err) => {
-          console.log('Error');
-          console.error(err);
+          console.log('Error')
+          console.error(err)
         });
     },
 
@@ -41,10 +40,15 @@ let app = new Vue({
       const url = `${GLABSAPIROOT}/v1/UploadBAC`
       
       axios.post(url, formData)
-        .then((resp) => {
-          //TODO::create toast when upload complete
-          console.log(resp)
-        }) 
+        .then((resp) => {       
+          toastr.success('Successfully uploaded new BAC!', 'Success')
+
+        }, (error) => {
+          if (error.response.status === 422) {
+            toastr.error(error.response.data.reason, `Error: ${error.response.status} - ${error.response.statusText}`)
+            console.error(error.response)
+          }
+      }) 
       
     },
 
@@ -65,6 +69,24 @@ let app = new Vue({
 
   created: function() {
     this.getReturnedDebits();
+    
+    toastr.options = {
+      "closeButton": false,
+      "debug": false,
+      "newestOnTop": false,
+      "progressBar": false,
+      "positionClass": "toast-bottom-center",
+      "preventDuplicates": false,
+      "onclick": null,
+      "showDuration": "300",
+      "hideDuration": "1000",
+      "timeOut": "5000",
+      "extendedTimeOut": "1000",
+      "showEasing": "swing",
+      "hideEasing": "linear",
+      "showMethod": "fadeIn",
+      "hideMethod": "fadeOut"
+    }
   },
 
 });

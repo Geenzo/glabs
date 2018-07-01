@@ -68,7 +68,7 @@ module.exports = (app) => {
           } else if (statusCode == 422){
             return res.status(422).send({
               upload: "Failed",
-              reason: "File with this name had already been uploaded for yesterday, please upload a different file or change the name of the file."
+              reason: "File with this name has already been uploaded for yesterday BACs, please upload a different file or change the name of the file."
             })
           }
       })
