@@ -29,9 +29,22 @@ let app = new Vue({
     },
 
     uploadNewBac: function(bacFile) {
-      console.log(bacFile)
-      document.getElementById('uploadBacInput').files[0];
-      console.log(document.getElementById('uploadBacInput').files[0])
+      let uploadedFile = document.getElementById('uploadBacInput')
+      let formData = new FormData()
+      
+      formData.set('uploadedBAC', uploadedFile.files[0])
+
+      const config = {
+          headers: { 'content-type': 'application/json' }
+      }
+
+      const url = `${GLABSAPIROOT}/v1/UploadBAC`
+      
+      axios.post(url, formData)
+        .then((resp) => {
+          //TODO::create toast when upload complete
+          console.log(resp)
+        }) 
       
     },
 
