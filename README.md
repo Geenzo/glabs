@@ -1,11 +1,9 @@
 # glabs
-This app will use nodeJS to check the `BACSDirectory/newBACS` folder for any new BACS.xml files on launch and then every minute after launch and if it finds any new BACS it will
-take the .xml file from this directory, convert xml to JSON and then store this data in the mongoDB collection. Once this has been done it will then .zip the older BAC directory
-and place it in the `BACSDirectory/archivedBACS` folder.
+This app will use nodeJS to allow the user to upload new BACs in an .XML format, which will then take the .xml file, convert xml to JSON and then store this data in the mongoDB collection. Once this has been done it will then .zip the older BAC directory and place it in the `BACSDirectory/archivedBACS` folder. for archiving purposes
 
-After the the above has taken place the app will then run the `returnDebits.js` script that will take any BACS in the mongoDB instance with `state: "Ready For Processing` and process them to returnedDebits. this task will also run every 2 minutes after launch to look for new BACS that come into mongoDB and are ready to be Processed.
+After the the above has taken place the app will then run the `returnDebits.js` script that will take any BACS in the mongoDB instance with `state: "Ready For Processing` and process them to returnedDebits. this task will also run every minute after launch to look for new BACS that come into mongoDB and are ready to be Processed.
 
-The front-end of this application should also open automatically on launch of the app, to `http://localhost:3001/application/` for the user to have a simple UI to view processed BACS. The front-end will also automatically retrieve all new Processed BACS from the back end of the application every minute.
+The front-end of this application `http://localhost:3001/application/` for the user to have a simple UI to upload and view processed BACS. The front-end will also automatically retrieve all new Processed BACS from the back end of the application every minute using cron jobs to run back-end processes and socket.io for real time updates
 
 # Running the application
 Once you have Node.js and NPM installed [See Here](https://docs.npmjs.com/getting-started/installing-node)
@@ -17,10 +15,10 @@ Once you have the above installed - follow the following steps to start the appl
 
 1. `git clone https://github.com/Geenzo/glabs.git`
 2. run `npm install` in the root of the cloned repo
-3. go into the `BACSDirectory/NewBACS` folder and create a copy of one of the example directories (with the bacs.xml files inside)
-4. rename the new directory you have created to yesterdays date in the format of `DD-MM-YYYY` like the other examples
-5. have local instance of mongoDB running
-6. run `npm start`
+3. have local instance of mongoDB running
+4. run `npm start`
+5. go to `http://localhost:3001/application/`
+
 
 # Testing
 
@@ -36,7 +34,8 @@ Once you have the above installed - follow the following steps to start the appl
 
  <h4>Backend:</h4>
  Node.js<br>
- MongoDB
+ MongoDB<br>
+ Socket.io
 
 <h4>Testing:</h4>
 Mocha<br>
@@ -56,3 +55,6 @@ mongoose: ^5.0.12<br>
 opn: ^5.3.0<br>
 path: ^0.12.7<br>
 xml2js: ^0.4.19<br>
+formidable: ^1.2.1<br>
+socket.io: ^2.1.1<br>
+toastr: ^2.1.4<br>
