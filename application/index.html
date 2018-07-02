@@ -55,10 +55,10 @@
         <div class="bacsProcessedBox col-md-12 col-sm-12">
           <div class="alert alert-info" role="alert">
             <h4>
-              <u>There are two cron jobs automatically running in the background - you will be notified via a toast notifaction when they have ran.</u><br>
+              <u>There are two cron jobs automatically running in the background (every minute) - you will be notified via a toast notification when they have ran.</u><br>
             </h4>
             <b>1. RetrieveBacsDocs - </b> this cron job takes all new BACs, parses the .xml files to json and adds them to the MongoDB <b><u>(runs every minute)</u></b><br>
-            <b>2. ReturnDebits - </b> this cron jobs finds all BACs with status 'Ready For Processing' in mongoDB and updates the status to 'Processed' then returns the processed BACs <b><u>(runs every second minute)</u></b>
+            <b>2. ReturnDebits - </b> this cron jobs finds all BACs with status 'Ready For Processing' in mongoDB and updates the status to 'Processed' then returns the processed BACs <b><u>(runs every minute)</u></b>
           </div>
         </div>
       </div>

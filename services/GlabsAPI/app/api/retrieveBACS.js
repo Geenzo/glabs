@@ -10,8 +10,9 @@ const parser = new xml2js.Parser({explicitArray : false, ignoreAttrs : false, me
 
 const retrieveBacsFromDirectory = () => {
   return new Promise ((resolve, reject) => {
-    const DirectoryDate = moment().subtract(1, 'days').format('DD-MM-YYYY');
-    let yesterdaysBacFiles = glob.sync(path.join(`BACSDirectory/newBACS/${DirectoryDate}/*.xml`));
+    const DirectoryDate = moment().subtract(1, 'days').format('DD-MM-YYYY')
+    let yesterdaysBacFiles = glob.sync(path.join(`BACSDirectory/newBACS/${DirectoryDate}/*.xml`))
+
     if (yesterdaysBacFiles.length > 0) {
     resolve(yesterdaysBacFiles)
   } else {
@@ -109,14 +110,36 @@ const archiveProcessedBac = (savedBac) => {
     });
 }
 
+const deleteArchivedBacsFromNewBACFolder = (savedBacs) => {
+    const DirectoryDate = moment().subtract(1, 'days').format('DD-MM-YYYY')
+    let newDir = path.join(`BACSDirectory/newBACS/${DirectoryDate}`)
+    let numberOfFilesRemoved
+    
+    fs.readdir(newDir, (err, files) => {
+        if (err) throw err
+        numberOfFilesRemoved = files.length
+        console.log(`${numberOfFilesRemoved} BACS have been removed from the new BACs directory`)
+        for (const file of files) {
+          fs.unlink(path.join(newDir, file), err => {
+            if (err) throw err;
+          });
+        }
+      });
+
+    return Promise.resolve(savedBacs)
+    
+}
+
 const RetrieveBacsDocs = () => {
     return retrieveBacsFromDirectory()
         .then(readBacFiles)
         .then(parseBacFile)
         .then(saveBacToDB)
         .then(archiveProcessedBac)
-        .then(bacSaved => {
-            console.log(`${bacSaved.length} BACS have been logged to be processed - retrieve BACS Task now exiting...`);
+        .then(deleteArchivedBacsFromNewBACFolder)
+        .then(savedBacs => {
+            console.log(`${savedBacs.length} BACS have been logged to be processed - retrieve BACS Task now exiting...`)
+            return savedBacs.length
         })
         .catch((err) => {
             console.log(`${err} - RetrieveBacsDocs task now exiting...`);

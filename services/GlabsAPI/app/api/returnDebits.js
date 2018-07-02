@@ -28,8 +28,8 @@ const processBAC = (bac) => {
     return new Promise((resolve, reject) => {
         let updateDate = moment()
         
-        return models.BacsDocument.findByIdAndUpdate(bac._id, {$set: {state: "Processed", updated: updateDate }}, {new: true}).then((updatedBAC) => {
-            console.log(`${updatedBAC.name} - bac has been processed..`);
+        models.BacsDocument.findByIdAndUpdate(bac._id, {$set: {state: "Processed", updated: updateDate }}, {new: true}).then((updatedBAC) => {
+            console.log(`${updatedBAC.name} - bac has been processed..`)
             resolve(updatedBAC)
         })
     })
@@ -40,10 +40,11 @@ const ReturnDebits = () => {
     return fetchReadyBACS()
         .then(updateBACS)
         .then(bacProcessed => {
-            console.log(`${bacProcessed.length} BACS have been processed successfully - Return Debits Task now exiting...`);
+            console.log(`${bacProcessed.length} BACS have been processed successfully - Return Debits Task now exiting...`)
+            return bacProcessed.length
         })
         .catch((err) => {
-            console.log(`${err} - Return Debits Task now exiting...`);
+            console.log(`${err} - Return Debits Task now exiting...`)
         })
 }
 

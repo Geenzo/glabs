@@ -72,15 +72,20 @@ let app = new Vue({
     let socket = io.connect(GLABSAPIROOT)
 
     socket.on('Retrieve BACS', function (data) {
-      console.log('socket from server received - Retrieve BACS');
-      toastr.info('Yesterdays BACs have now been stored in the database and ready for processing...', 'Back end function successfully ran')      
-      socket.emit('my other event', { my: 'data' })
+      console.log('socket from server received - Retrieve BACS')
+      if(data) {
+        toastr.info(`${data} BACs have now been stored in the database and ready for processing... they will be automatically processed in one minute...`, 'Back end function successfully ran')      
+      } else {
+        toastr.warning(`BACs process has ran but there were no new bacs to be processed. Please upload new BACs to be processed`, 'Back end function successfully ran')      
+      }
     })
 
     socket.on('Process BACS', function (data) {
-      console.log('socket from server received - process BACS');
-      toastr.info('Yesterdays BACs have now been processed.', 'Back end function successfully ran')
-      app.getReturnedDebits()
+      console.log('socket from server received - process BACS')
+      if(data) {
+        toastr.success(`${data} BACs from Yesterdays have now been processed.`, 'Back end function successfully ran')
+        app.getReturnedDebits()
+      }
     })
 
     toastr.options = {

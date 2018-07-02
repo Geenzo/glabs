@@ -23,16 +23,24 @@ const http = require('http'),
   //Cron job to check for new BACs every minute
   new CronJob('* * * * *', function() {
     RetrieveBacsDocs()
+      .then(numberOfBacs => {
+        console.log('this is stuff')
+        console.log(numberOfBacs)
+        io.emit('Retrieve BACS', numberOfBacs)
+        
+      })
     console.log('Cron Job for Retrieving BACS has been triggered...')
-    io.emit('Retrieve BACS', 'Retrieve BACs CronJob has been triggered on server')
 
   }, null, true, 'Europe/London')
 
   //Cron job to process BACs every 2 minute
-  new CronJob('*/2 * * * *', function() {
+  new CronJob('* * * * *', function() {
     ReturnDebits()
+      .then(numberOfBacsProcessed => {
+        console.log(numberOfBacsProcessed)  
+        io.emit('Process BACS', numberOfBacsProcessed)
+      })
     console.log('Cron Job for Processing BACS has been triggered...')
-    io.emit('Process BACS', 'Process BACs CronJob has been triggered on server')
 
   }, null, true, 'Europe/London');
 
