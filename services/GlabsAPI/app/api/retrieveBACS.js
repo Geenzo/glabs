@@ -4,30 +4,67 @@ const fs = require('fs'),
     moment = require('moment'),
     path = require('path'),
     {BacsDoc} = require('../models/bacsDocModel'),
-    archiver = require('archiver');
+    archiver = require('archiver'),
+    AWS = require('aws-sdk')
+
+let {BUCKET_NAME, BUCKET_NAME_NEW_BACS, BUCKET_NAME_ARCHIVED_BACS, IAM_USER_KEY, IAM_USER_SECRET} = require('../../../../secrets.js')
+
+console.log(BUCKET_NAME_NEW_BACS)
+console.log(IAM_USER_KEY)
+console.log(IAM_USER_SECRET)
+
+let s3bucket = new AWS.S3({
+    accessKeyId: IAM_USER_KEY,
+    secretAccessKey: IAM_USER_SECRET,
+    Bucket: BUCKET_NAME_NEW_BACS
+  });
+
 
 const parser = new xml2js.Parser({explicitArray : false, ignoreAttrs : false, mergeAttrs : true});
 
-const retrieveBacsFromDirectory = () => {
+const retrieveBacsFromAWSS3Bucket = () => {
   return new Promise ((resolve, reject) => {
-    const DirectoryDate = moment().subtract(1, 'days').format('DD-MM-YYYY')
-    let yesterdaysBacFiles = glob.sync(path.join(`BACSDirectory/newBACS/${DirectoryDate}/*.xml`))
+    let params = { 
+        Bucket: BUCKET_NAME,
+        Delimiter: '',
+        Prefix: 'newBacs/' 
+    }
+    s3bucket.listObjects(params, function (err, data) {
+        if(err)throw err
+        let allBacs = data.Contents.filter(content => content.Size > 0)
+        
+        let href = this.request.httpRequest.endpoint.href
+        let bucketUrl = href + BUCKET_NAME + '/'
 
-    if (yesterdaysBacFiles.length > 0) {
-    resolve(yesterdaysBacFiles)
-  } else {
-    reject(`No BACS found for ${DirectoryDate}`);
-  }
+        let bacs = allBacs.map(function(bac) {
+        let bacKey = bac.Key
+        let bacUrl = bucketUrl + encodeURIComponent(bacKey)
+
+        bac.url = bacUrl
+        return bac
+        })
+        
+        if (bacs.length > 0) {
+            resolve(allBacs)
+        } else {
+            reject(`No new BACS found`)
+        }
+    })
+
   })
 };
 
-const readBacFiles = (retrievedBacs) => {
+const readBacFiles = (retrievedBacs) => {   
     let bacs = retrievedBacs.map(bacfile => {
         return new Promise ((resolve, reject) => {
-            fs.readFile(bacfile, (err, data) => {
-                resolve(data);
-            })
-            })
+            let params = {Bucket: BUCKET_NAME, Key: bacfile.Key}
+
+            s3bucket.getObject(params, function(err, json_data) {
+                if (!err) {
+                    resolve(json_data.Body.toString())
+                }
+           })
+        })
     })
 
     return Promise.all(bacs)
@@ -131,7 +168,7 @@ const deleteArchivedBacsFromNewBACFolder = (savedBacs) => {
 }
 
 const RetrieveBacsDocs = () => {
-    return retrieveBacsFromDirectory()
+    return retrieveBacsFromAWSS3Bucket()
         .then(readBacFiles)
         .then(parseBacFile)
         .then(saveBacToDB)
