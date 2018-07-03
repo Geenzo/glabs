@@ -2,6 +2,36 @@ const models = require('../setup')
 const formidable = require('formidable')
 const path = require('path')
 const fs = require('fs') 
+let AWS = require('aws-sdk')
+let {BUCKET_NAME_NEW_BACS, IAM_USER_KEY, IAM_USER_SECRET} = require('../../../../secrets.js')
+
+let s3bucket = new AWS.S3({
+  accessKeyId: IAM_USER_KEY,
+  secretAccessKey: IAM_USER_SECRET,
+  Bucket: BUCKET_NAME_NEW_BACS
+});
+
+const uploadToS3 = (file) => {
+  return new Promise((resolve, reject) => {
+    fs.readFile(file.path, function (err, data) {
+      s3bucket.createBucket(function () {
+          var params = {
+            Bucket: BUCKET_NAME_NEW_BACS,
+            Key: file.name,
+            Body: data
+          };
+          s3bucket.upload(params, function (err, data) {
+            if (err) {
+              console.log('error in callback')
+              reject(err)
+            }
+            console.log('success')
+            resolve(data)
+          })
+      })
+    })
+  })
+}
 
 module.exports = (app) => {
 
@@ -50,27 +80,28 @@ module.exports = (app) => {
       form.parse(req)
       
       form.on('fileBegin', function (name, file){
-          if (fs.existsSync(`${yesterdaysDirectoryPath}/${file.name}`)) {
-            console.log('file already exists');
-            statusCode = 422
-          }
-
           file.path = `${yesterdaysDirectoryPath}/${file.name}`
       })
 
       form.on('file', function (name, file){
           console.log('Uploaded ' + file.name);
+          
+          uploadToS3(file)
+            .then(result => {
+              console.log('this is result');
+              console.log(result);
+              return res.status(200).json({
+                upload: "Success"
+              })
+            })
+            .catch(err => {
+              console.log(err.message)
+              return res.status(422).send({
+                upload: "Failed",
+                reason: err.message
+              })
+            })
 
-          if(statusCode == 200) {
-            return res.status(200).json({
-              upload: "Success"
-            })
-          } else if (statusCode == 422){
-            return res.status(422).send({
-              upload: "Failed",
-              reason: "File with this name has already been uploaded for yesterday BACs, please upload a different file or change the name of the file."
-            })
-          }
       })
 
   })
