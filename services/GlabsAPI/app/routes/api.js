@@ -35,7 +35,7 @@ const uploadToS3 = (file) => {
 
 module.exports = (app) => {
 
-  app.route('/v1/ReturnedDebitItems')
+  app.route('/ReturnedDebitItems')
     .get((req, res) => {  
       models.BacsDocument.find({state: "Processed"}).then((returnDebits) => {
         let responseBody = {
@@ -50,7 +50,7 @@ module.exports = (app) => {
       });
    })
 
-   app.route('/v1/UploadBAC')
+   app.route('/UploadBAC')
     .post((req, res) => {  
 
       let today = new Date()
