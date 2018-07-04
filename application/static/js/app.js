@@ -69,7 +69,7 @@ let app = new Vue({
   created: function() {
     this.getReturnedDebits()
     
-    let socket = io.connect(GLABSAPIROOT)
+    let socket = io.connect('/')
 
     socket.on('Retrieve BACS', function (data) {
       console.log('socket from server received - Retrieve BACS')
