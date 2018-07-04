@@ -35,7 +35,8 @@ Once you have the above installed - follow the following steps to start the appl
  <h4>Backend:</h4>
  Node.js<br>
  MongoDB<br>
- Socket.io
+ Socket.io<br>
+ AWS S3 buckets
 
 <h4>Testing:</h4>
 Mocha<br>
