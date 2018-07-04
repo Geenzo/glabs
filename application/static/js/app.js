@@ -1,4 +1,4 @@
-let GLABSAPIROOT = "http://localhost:3001"
+// let GLABSAPIROOT = "http://localhost:3001"
 
 //rate at which new data is received from backend (checks for new bacs every minute)
 let UPDATE_INTERVAL = 60 * 1000
@@ -14,7 +14,7 @@ let app = new Vue({
   methods: {
 
     getReturnedDebits: function() {
-      axios.get(GLABSAPIROOT + "/v1/ReturnedDebitItems")
+      axios.get("/ReturnedDebitItems")
         .then((resp) => {    
           this.returnedDebits = resp.data.returnDebits;
           this.totalBacs = resp.data.totalProcessedBacs
@@ -36,7 +36,7 @@ let app = new Vue({
           headers: { 'content-type': 'application/json' }
       }
 
-      const url = `${GLABSAPIROOT}/v1/UploadBAC`
+      const url = `/UploadBAC`
       
       axios.post(url, formData)
         .then((resp) => {       
