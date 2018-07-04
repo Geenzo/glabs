@@ -2,7 +2,6 @@ const http = require('http'),
   GlabsAPI = require('./GlabsAPI/config/app.js'),
   GlabsServer = http.Server(GlabsAPI),
   GlabsPORT = process.env.PORT || 3001,
-  LOCAL = process.env.LOCAL || '0.0.0.0',
   CronJob = require('cron').CronJob,
   {RetrieveBacsDocs} = require('./GlabsAPI/app/api/retrieveBACS.js'),
   {ReturnDebits} = require('./GlabsAPI/app/api/returnDebits.js'),
@@ -45,4 +44,4 @@ const http = require('http'),
   }, null, true, 'Europe/London');
 
 
-  GlabsServer.listen(GlabsPORT, LOCAL, () => console.log(`Glabs mongoDB running on ${GlabsPORT}`));
+  GlabsServer.listen(GlabsPORT, () => console.log(`Glabs mongoDB running on ${GlabsPORT}`));
